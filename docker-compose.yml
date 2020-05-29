@@ -1,0 +1,40 @@
+# v2 syntax
+version: '2'
+
+# Named volumes
+volumes:
+  # MySQL Data
+  laravel-course-mysql-data:
+    driver: local
+
+services:
+  # MySQL (5.7)
+  mysql:
+    image: mysql:5.7
+    container_name: laravel-course-mysql
+    volumes:
+      - laravel-course-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=laravel-course
+      - MYSQL_DATABASE=laravel-course
+      - MYSQL_USER=laravel-course
+      - MYSQL_PASSWORD=laravel-course
+
+  nodejs:
+    image: ambientum/node:lts
+    container_name: laravel-course-node
+    volumes:
+      - ./www:/var/www
+
+  # PHP (with Caddy)
+  app:
+    image: ambientum/php:7.2-nginx
+    container_name: laravel-course-app
+    volumes:
+      - .:/var/www/app
+    ports:
+      - "80:8080"
+    links:
+      - mysql

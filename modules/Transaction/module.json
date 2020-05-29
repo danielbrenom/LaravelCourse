@@ -1,0 +1,13 @@
+{
+    "name": "Transaction",
+    "alias": "transaction",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
