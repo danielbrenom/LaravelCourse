@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Product extends Model
 {
-    private const STATUS_AVAILABLE = 'AVAILABLE';
-    private const STATUS_UNAVAILABLE = 'UNAVAILABLE';
+    public const STATUS_AVAILABLE = 'AVAILABLE';
+    public const STATUS_UNAVAILABLE = 'UNAVAILABLE';
 
     protected $fillable = [
         'name',
