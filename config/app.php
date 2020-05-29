@@ -165,7 +165,12 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Modules\Buyer\Providers\BuyerServiceProvider::class,
+        Modules\Category\Providers\CategoryServiceProvider::class,
+        Modules\Products\Providers\ProductsServiceProvider::class,
+        Modules\Seller\Providers\SellerServiceProvider::class,
+        Modules\Transaction\Providers\TransactionServiceProvider::class,
+        Modules\User\Providers\UserServiceProvider::class,
         /*
          * Application Service Providers...
          */
