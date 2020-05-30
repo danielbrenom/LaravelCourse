@@ -2,10 +2,15 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property bool verified
+ * @property bool admin
+ * @property string email
+ * @property string name
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -46,15 +51,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function isVerified(){
+    public function isVerified(): bool
+    {
         return $this->verified;
     }
 
-    public function isAdmin(){
+    public function isAdmin(): bool
+    {
         return $this->admin;
     }
 
-    public static function generateVerificationToken(){
+    public static function generateVerificationToken()
+    {
         return md5(time());
     }
 }
