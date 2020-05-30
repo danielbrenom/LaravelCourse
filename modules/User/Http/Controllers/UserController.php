@@ -2,21 +2,20 @@
 
 namespace Modules\User\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiBaseController;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class UserController extends ApiBaseController
 
 {
-
     public function index(): JsonResponse
     {
         $user = User::all();
-        return response()->json(['data' => $user], Response::HTTP_OK);
+        return $this->showAll($user);
     }
 
     public function store(Request $request): JsonResponse
@@ -34,13 +33,13 @@ class UserController extends Controller
         $data['verification_token'] = User::generateVerificationToken();
         $data['admin'] = false;
         $user = User::create($data);
-        return response()->json(['data' => $user], Response::HTTP_CREATED);
+        return $this->showOne($user, Response::HTTP_CREATED);
     }
 
     public function show($id): JsonResponse
     {
         $user = User::findOrFail($id);
-        return response()->json(['data' => $user], Response::HTTP_OK);
+        return $this->showOne($user);
     }
 
     public function update(Request $request, $id): JsonResponse
@@ -62,20 +61,20 @@ class UserController extends Controller
             $user->verification_token = User::generateVerificationToken();
         }
         if ($request->has('admin') && !$user->isVerified()) {
-            return response()->json(['error' => 'Only verified user can modify admin field'], Response::HTTP_CONFLICT);
+            return $this->errorResponse(trans('user::messages.only_verified'), Response::HTTP_CONFLICT);
         }
         $user->fill($data);
         if (!$user->isDirty()) {
-            return response()->json(['error' => 'No value to update'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->errorResponse(trans('user::messages.no_update'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user->save();
-        return response()->json(['data' => $user], Response::HTTP_OK);
+        return $this->showOne($user);
     }
 
     public function destroy($id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['data' => $user], Response::HTTP_OK);
+        return $this->showOne($user);
     }
 }

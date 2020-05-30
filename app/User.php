@@ -65,4 +65,20 @@ class User extends Authenticatable
     {
         return md5(time());
     }
+
+    /*
+     * Mutators and Accessors
+     */
+
+    public function setNameAttribute($name){
+        $this->attributes['name'] = strtolower($name);
+    }
+
+    public function getNameAttribute($name){
+        return ucwords($this->attributes['name']);
+    }
+
+    public function setEmailAttribute($email){
+        $this->attributes['email'] = strtolower($email);
+    }
 }

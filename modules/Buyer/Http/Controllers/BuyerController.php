@@ -3,21 +3,20 @@
 namespace Modules\Buyer\Http\Controllers;
 
 use App\Domain\Models\Tables\Buyer;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiBaseController;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
-class BuyerController extends Controller
+class BuyerController extends ApiBaseController
 {
     public function index(): JsonResponse
     {
         $buyers = Buyer::has('transactions')->get();
-        return response()->json(['data' => $buyers], Response::HTTP_OK);
+        return $this->showAll($buyers);
     }
 
     public function show($id): JsonResponse
     {
         $buyer = Buyer::has('transactions')->findOrFail($id);
-        return response()->json(['data' => $buyer], Response::HTTP_OK);
+        return $this->showOne($buyer);
     }
 }
