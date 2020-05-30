@@ -6,14 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property mixed status
  */
 class Product extends Model
 {
+    use SoftDeletes;
+
     public const STATUS_AVAILABLE = 'AVAILABLE';
     public const STATUS_UNAVAILABLE = 'UNAVAILABLE';
+
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'name',

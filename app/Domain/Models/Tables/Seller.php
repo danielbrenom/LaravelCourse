@@ -11,7 +11,7 @@ class Seller extends User
     protected static function booted()
     {
         static::addGlobalScope('seller', static function (Builder $builder) {
-            $builder->has('transactions');
+            $builder->has('products');
         });
     }
 
