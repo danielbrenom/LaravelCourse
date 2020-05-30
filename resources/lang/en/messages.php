@@ -3,6 +3,7 @@
 return [
     'model' => [
         'not_found' => 'There\'s no :model with the given ID',
+        'no_update' => 'No value to update',
     ],
     'http' => [
         '404' => 'Requested URL doesn\'t exist',

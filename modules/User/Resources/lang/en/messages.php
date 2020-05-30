@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'only_verified' => 'Only verified user can modify admin field',
-    'no_update' => 'No value to update',
+    'only_verified' => 'Only verified users can modify admin field',
 ];
