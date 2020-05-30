@@ -15,9 +15,8 @@ class SellerController extends ApiBaseController
         return $this->showAll($seller);
     }
 
-    public function show($id): JsonResponse
+    public function show(Seller $seller): JsonResponse
     {
-        $seller = Seller::has('products')->findOrFail($id);
         return $this->showOne($seller);
     }
 }
