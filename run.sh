@@ -18,7 +18,7 @@ docker exec -it laravel-course-app php artisan migrate
 echo Make seeds
 docker exec -it laravel-course-app php artisan db:seed
 
-docker-compose run --rm nodejs npm install
+#docker-compose run --rm nodejs npm install
 
 echo Information of new containers
 docker ps -a

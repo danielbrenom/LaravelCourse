@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
                 }
                 break;
         }
-        return config('app.debug') === 'true' ?
+        return config('app.debug') === true ?
             parent::render($request, $exception) :
             $this->errorResponse(trans('messages.http.' . Response::HTTP_INTERNAL_SERVER_ERROR),
                 Response::HTTP_INTERNAL_SERVER_ERROR);

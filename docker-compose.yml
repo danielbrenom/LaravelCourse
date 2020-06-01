@@ -22,13 +22,12 @@ services:
       - MYSQL_USER=laravel-course
       - MYSQL_PASSWORD=laravel-course
 
-  nodejs:
-    image: ambientum/node:lts
-    container_name: laravel-course-node
-    volumes:
-      - ./www:/var/www
+#  nodejs:
+#    image: ambientum/node:lts
+#    container_name: laravel-course-node
+#    volumes:
+#      - ./www:/var/www
 
-  # PHP (with Caddy)
   app:
     image: ambientum/php:7.2-nginx
     container_name: laravel-course-app

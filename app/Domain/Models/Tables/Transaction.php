@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Transaction
+ * @property Product products
+ */
 class Transaction extends Model
 {
     use SoftDeletes;
@@ -25,6 +29,6 @@ class Transaction extends Model
 
     public function products(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class,'product_id','id','products');
     }
 }
