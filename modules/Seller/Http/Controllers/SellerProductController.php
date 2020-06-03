@@ -1,0 +1,70 @@
+<?php
+
+
+namespace Modules\Seller\Http\Controllers;
+
+
+use App\Domain\Models\Tables\Product;
+use App\Domain\Models\Tables\Seller;
+use App\Http\Controllers\ApiBaseController;
+use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+class SellerProductController extends ApiBaseController
+{
+    public function index(Seller $seller): JsonResponse
+    {
+        return $this->showAll($seller->products);
+    }
+
+    public function store(Request $request, User $seller)
+    {
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+            'quantity' => 'required|integer|min:1',
+            'image' => 'required|image'
+        ];
+        $this->validate($request, $rules);
+        $data = $request->all();
+        $data['status'] = Product::STATUS_UNAVAILABLE;
+        $data['image'] = '1.jpg';
+        $data['seller_id'] = $seller->id;
+        $product = (new Product())->fill($data);
+        $product->save();
+        return $this->showOne($product);
+    }
+
+    public function update(Request $request, Seller $seller, Product $product)
+    {
+        $rules = [
+            'quantity' => 'integer|min:1',
+            'status' => Rule::in(Product::STATUS_UNAVAILABLE, Product::STATUS_AVAILABLE),
+            'image' => 'image'
+        ];
+        $this->validate($request, $rules);
+        throw_if($product->seller_id !== $seller->id,
+            new HttpException('Product doesn\'t belong to seller', 422));
+        if ($request->has('status') && $product->isAvailable() && $product->categories()->count() === 0) {
+            return $this->errorResponse('Active products need to have at least one category', Response::HTTP_CONFLICT);
+        }
+        $product->fill(array_filter($request->all()));
+        if($product->isClean()){
+            return $this->errorResponse(trans('messages.model.no_update'), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $product->save();
+        return $this->showOne($product);
+    }
+
+    public function destroy(Seller $seller, Product $product){
+        throw_if($product->seller_id !== $seller->id,
+            new HttpException('Product doesn\'t belong to seller', 422));
+        $product->delete();
+        return $this->showOne($product);
+    }
+}

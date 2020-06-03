@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     private const USER_QUANTITY = 100;
     private const CATEGORY_QUANTITY = 20;
     private const PRODUCT_QUANTITY = 100;
-    private const TRANSACTION_QUANTITY = 50;
+    private const TRANSACTION_QUANTITY = 1000;
 
     /**
      * Seed the application's database.
