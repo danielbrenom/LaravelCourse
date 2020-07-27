@@ -2,6 +2,7 @@
 
 namespace App\Domain\Models\Tables;
 
+use App\Domain\Observers\Tables\ProductObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,6 +14,7 @@ use Illuminate\Support\Collection;
  * @property mixed status
  * @property Collection categories
  * @property Model seller
+ * @see ProductObserver
  */
 class Product extends Model
 {
