@@ -65,7 +65,7 @@ class UserController extends ApiBaseController
         if (!$user->isDirty()) {
             return $this->errorResponse(trans('messages.model.no_update'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        $user->save();
+        $user->update();
         return $this->showOne($user);
     }
 
