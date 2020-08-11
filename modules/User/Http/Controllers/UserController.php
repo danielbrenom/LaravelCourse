@@ -3,10 +3,12 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\ApiBaseController;
+use App\Mail\UserVerification;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class UserController extends ApiBaseController
@@ -81,5 +83,13 @@ class UserController extends ApiBaseController
         $user->verification_token = null;
         $user->save();
         return $this->showMessage('User verification complete');
+    }
+
+    public function resend(User $user){
+        if($user->isVerified()){
+            return $this->errorResponse('User already verified', Response::HTTP_CONFLICT);
+        }
+        Mail::to($user)->send(new UserVerification($user));
+        return $this->showMessage('Verification email sent');
     }
 }
