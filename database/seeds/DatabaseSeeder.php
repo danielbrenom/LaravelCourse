@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         $this->truncateTables();
+        $this->flushEventListeners();
         $this->seedTables();
     }
 
@@ -33,6 +34,13 @@ class DatabaseSeeder extends Seeder
         DB::table('products')->truncate();
         DB::table('transactions')->truncate();
         DB::table('category_product')->truncate();
+    }
+
+    public function flushEventListeners(){
+        User::flushEventListeners();
+        Category::flushEventListeners();
+        Product::flushEventListeners();
+        Transaction::flushEventListeners();
     }
 
     private function seedTables(): void

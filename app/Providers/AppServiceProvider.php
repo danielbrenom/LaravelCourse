@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Domain\Models\Tables\Product;
 use App\Domain\Observers\Tables\ProductObserver;
+use App\Domain\Observers\Tables\UserObserver;
+use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(197);
         Product::observe(ProductObserver::class);
+        User::observe(UserObserver::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Domain\Observers\Tables\UserObserver;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
  * @property bool admin
  * @property string email
  * @property string name
+ * @see UserObserver
  */
 class User extends Authenticatable
 {
