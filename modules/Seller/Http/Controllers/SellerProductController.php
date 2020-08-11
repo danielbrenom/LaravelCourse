@@ -8,10 +8,10 @@ use App\Domain\Models\Tables\Product;
 use App\Domain\Models\Tables\Seller;
 use App\Http\Controllers\ApiBaseController;
 use App\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -33,7 +33,7 @@ class SellerProductController extends ApiBaseController
         $this->validate($request, $rules);
         $data = $request->all();
         $data['status'] = Product::STATUS_UNAVAILABLE;
-        $data['image'] = '1.jpg';
+        $data['image'] = $request->image->store('');
         $data['seller_id'] = $seller->id;
         $product = (new Product())->fill($data);
         $product->save();
@@ -49,11 +49,16 @@ class SellerProductController extends ApiBaseController
         ];
         $this->validate($request, $rules);
         throw_if($product->seller_id !== $seller->id,
-            new HttpException('Product doesn\'t belong to seller', 422));
+            new HttpException(422,'Product doesn\'t belong to seller'));
         if ($request->has('status') && $product->isAvailable() && $product->categories()->count() === 0) {
             return $this->errorResponse('Active products need to have at least one category', Response::HTTP_CONFLICT);
         }
         $product->fill(array_filter($request->all()));
+        if($request->hasFile('image')){
+            Storage::delete($product->image);
+            $product->image = $request->image->store('');
+            unset($request->image);
+        }
         if($product->isClean()){
             return $this->errorResponse(trans('messages.model.no_update'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -63,7 +68,8 @@ class SellerProductController extends ApiBaseController
 
     public function destroy(Seller $seller, Product $product){
         throw_if($product->seller_id !== $seller->id,
-            new HttpException('Product doesn\'t belong to seller', 422));
+            new HttpException(422,'Product doesn\'t belong to seller'));
+        Storage::delete($product->image);
         $product->delete();
         return $this->showOne($product);
     }
