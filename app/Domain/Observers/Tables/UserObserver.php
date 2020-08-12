@@ -5,6 +5,7 @@ namespace App\Domain\Observers\Tables;
 use App\Mail\UserMailUpdate;
 use App\Mail\UserVerification;
 use App\User;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class UserObserver
@@ -14,10 +15,13 @@ class UserObserver
      *
      * @param User $user
      * @return void
+     * @throws Exception
      */
     public function created(User $user): void
     {
-        Mail::to($user)->send(new UserVerification($user));
+        retry(5, static function () use ($user) {
+            Mail::to($user)->send(new UserVerification($user));
+        }, 1000);
     }
 
     /**
@@ -25,11 +29,14 @@ class UserObserver
      *
      * @param User $user
      * @return void
+     * @throws Exception
      */
     public function updated(User $user): void
     {
         if ($user->isDirty('email')) {
-            Mail::to($user)->send(new UserMailUpdate($user));
+            retry(5, static function () use ($user) {
+                Mail::to($user)->send(new UserMailUpdate($user));
+            }, 1000);
         }
     }
 

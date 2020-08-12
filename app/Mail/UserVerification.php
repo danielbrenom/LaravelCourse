@@ -28,7 +28,8 @@ class UserVerification extends Mailable
      */
     public function build()
     {
-        //return $this->view('view.name');
-        return $this->text('user::emails.verification')->with(['user' => $this->user]);
+        return $this->markdown('user::emails.verification')
+            ->subject('Email confirmation')
+            ->with(['user' => $this->user]);
     }
 }

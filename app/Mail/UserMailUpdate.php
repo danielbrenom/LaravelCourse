@@ -30,9 +30,8 @@ class UserMailUpdate extends Mailable
      */
     public function build()
     {
-//        return $this->view('view.name');
-        return $this->text('user::emails.mail_confirm')
-            ->subject('Email confirmation')
+        return $this->markdown('user::emails.mail_confirm')
+            ->subject('Email update confirmation')
             ->with(['user' => $this->user]);
     }
 }
