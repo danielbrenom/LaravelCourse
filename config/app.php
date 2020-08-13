@@ -165,12 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Modules\Buyer\Providers\BuyerServiceProvider::class,
-        Modules\Category\Providers\CategoryServiceProvider::class,
-        Modules\Products\Providers\ProductsServiceProvider::class,
-        Modules\Seller\Providers\SellerServiceProvider::class,
-        Modules\Transaction\Providers\TransactionServiceProvider::class,
-        Modules\User\Providers\UserServiceProvider::class,
+        \Spatie\Fractal\FractalServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -179,6 +174,12 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Modules\Buyer\Providers\BuyerServiceProvider::class,
+        Modules\Category\Providers\CategoryServiceProvider::class,
+        Modules\Products\Providers\ProductsServiceProvider::class,
+        Modules\Seller\Providers\SellerServiceProvider::class,
+        Modules\Transaction\Providers\TransactionServiceProvider::class,
+        Modules\User\Providers\UserServiceProvider::class,
 
     ],
 

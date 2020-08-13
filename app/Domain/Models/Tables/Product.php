@@ -3,6 +3,7 @@
 namespace App\Domain\Models\Tables;
 
 use App\Domain\Observers\Tables\ProductObserver;
+use App\Transformers\ProductTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -37,6 +38,8 @@ class Product extends Model
     protected $hidden = [
         'pivot'
     ];
+
+    public $transformer = ProductTransformer::class;
 
     public function isAvailable(): bool
     {

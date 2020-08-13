@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Domain\Observers\Tables\UserObserver;
+use App\Transformers\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -61,6 +62,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public $transformer = UserTransformer::class;
 
     public function isVerified(): bool
     {

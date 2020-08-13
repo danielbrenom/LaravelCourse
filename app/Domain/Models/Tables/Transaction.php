@@ -2,6 +2,7 @@
 
 namespace App\Domain\Models\Tables;
 
+use App\Transformers\TransactionTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +22,12 @@ class Transaction extends Model
         'buyer_id',
         'product_id'
     ];
+    /**
+     * @var mixed
+     */
+    private $deleted_at;
+
+    public $transformer = TransactionTransformer::class;
 
     public function buyer(): BelongsTo
     {
