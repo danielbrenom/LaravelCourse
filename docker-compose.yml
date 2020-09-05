@@ -25,6 +25,10 @@ services:
   app:
     image: ambientum/php:7.2-nginx
     container_name: laravel-course-app
+    environment:
+      XDEBUG_ENABLED: "true"
+      XDEBUG_CONFIG: remote_host=192.168.15.15
+      PHP_IDE_CONFIG: serverName=PHPSTORM
     volumes:
       - .:/var/www/app
     ports:

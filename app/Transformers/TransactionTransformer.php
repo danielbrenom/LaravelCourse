@@ -43,4 +43,18 @@ class TransactionTransformer extends TransformerAbstract
             'deletion_date' => $transaction->deleted_at ?? '',
         ];
     }
+
+    public function originalAttributes($index): string
+    {
+        $attributes = [
+            'identifier' => 'id',
+            'quantity' => 'quantity',
+            'buyer' => 'buyer_id',
+            'product' => 'product_id',
+            'creation_date' => 'created_at',
+            'last_update' => 'updated_at',
+            'deletion_date' => 'deleted_at',
+        ];
+        return data_get($attributes, $index, null);
+    }
 }
