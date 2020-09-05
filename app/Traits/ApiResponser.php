@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 trait ApiResponser
@@ -31,7 +32,8 @@ trait ApiResponser
         $collection = $collection->map(function ($element) {
             return $this->transformData($element, $element->transformer);
         });
-        return $this->successResponse(['data' => $collection], $code);
+        $collection = $this->cacheResponse($collection);
+        return $this->successResponse(['data' => $this->paginate($collection)], $code);
     }
 
     protected function showOne(Model $model, $code = Response::HTTP_OK): JsonResponse
@@ -66,14 +68,14 @@ trait ApiResponser
         return $this->successResponse(['data' => $message], $code);
     }
 
-    protected function paginate(Collection $collection){
-        $rules = [
+    protected function paginate(Collection $collection): LengthAwarePaginator
+    {
+        Validator::validate(request()->all(), [
             'per_page' => 'integer|min:2|max:50'
-        ];
-        Validator::validate(request()->all(), $rules);
+        ]);
         $page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = data_get(request()->all(), 'per_page', 15);
-        $results = $collection->slice(($page-1)*$perPage, $perPage)->values();
+        $results = $collection->slice(($page - 1) * $perPage, $perPage)->values();
         $paginator = new LengthAwarePaginator($results, $collection->count(), $perPage, $page, [
             'path' => LengthAwarePaginator::resolveCurrentPath()
         ]);
@@ -85,5 +87,16 @@ trait ApiResponser
     {
         $transformation = fractal($data, new $transformer);
         return $transformation->toArray()['data'];
+    }
+
+    protected function cacheResponse($data)
+    {
+        $url = request()->url();
+        $query = request()->query();
+        ksort($query);
+        $queryString = http_build_query($query);
+        return Cache::remember("{$url}?{$queryString}", 30, static function () use ($data) {
+            return $data;
+        });
     }
 }
