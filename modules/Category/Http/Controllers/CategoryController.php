@@ -4,12 +4,18 @@ namespace Modules\Category\Http\Controllers;
 
 use App\Domain\Models\Tables\Category;
 use App\Http\Controllers\ApiBaseController;
+use App\Transformers\CategoryTransformer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CategoryController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store']);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -42,6 +42,12 @@ class UserTransformer extends TransformerAbstract
             'creation_date' => $user->created_at,
             'last_update' => $user->updated_at ?? '',
             'deletion_date' => $user->deleted_at ?? '',
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => route('users.show', $user->id),
+                ],
+            ],
         ];
     }
 
@@ -56,6 +62,21 @@ class UserTransformer extends TransformerAbstract
             'creation_date' => 'created_at',
             'last_update' => 'updated_at',
             'deletion_date' => 'deleted_at',
+        ];
+        return data_get($attributes, $index, null);
+    }
+    
+    public static function transformedAttributes($index): ?string
+    {
+        $attributes = [
+            'id' => 'identifier',
+            'name' => 'name',
+            'email' => 'email',
+            'verified' => 'is_verified',
+            'admin' => 'is_admin',
+            'created_at' => 'creation_date',
+            'updated_at' => 'last_update',
+            'deleted_at' => 'deletion_date',
         ];
         return data_get($attributes, $index, null);
     }

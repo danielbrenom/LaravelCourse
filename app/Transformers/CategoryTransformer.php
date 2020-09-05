@@ -15,7 +15,7 @@ class CategoryTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -40,6 +40,28 @@ class CategoryTransformer extends TransformerAbstract
             'creation_date' => $category->created_at,
             'last_update' => $category->updated_at ?? '',
             'deletion_date' => $category->deleted_at ?? '',
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => route('categories.show', $category->id),
+                ],
+                [
+                    'rel' => 'category.buyers',
+                    'href' => route('categories.buyers.index', $category->id),
+                ],
+                [
+                    'rel' => 'category.products',
+                    'href' => route('categories.products.index', $category->id),
+                ],
+                [
+                    'rel' => 'category.sellers',
+                    'href' => route('categories.sellers.index', $category->id),
+                ],
+                [
+                    'rel' => 'category.transactions',
+                    'href' => route('categories.transactions.index', $category->id),
+                ],
+            ],
         ];
     }
 
@@ -52,6 +74,19 @@ class CategoryTransformer extends TransformerAbstract
             'creation_date' => 'created_at',
             'last_update' => 'updated_at',
             'deletion_date' => 'deleted_at',
+        ];
+        return data_get($attributes, $index, null);
+    }
+
+    public static function transformedAttributes($index): ?string
+    {
+        $attributes = [
+            'id' => 'identifier',
+            'name' => 'title',
+            'description' => 'details',
+            'created_at' => 'creation_date',
+            'updated_at' => 'last_update',
+            'deleted_at' => 'deletion_date',
         ];
         return data_get($attributes, $index, null);
     }

@@ -4,6 +4,7 @@ namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\ApiBaseController;
 use App\Mail\UserVerification;
+use App\Transformers\UserTransformer;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,8 +13,13 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class UserController extends ApiBaseController
-
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("transform.input:" . UserTransformer::class)->only(['store', 'update']);
+    }
+
     public function index(): JsonResponse
     {
         $user = User::all();
@@ -77,7 +83,8 @@ class UserController extends ApiBaseController
         return $this->showOne($user);
     }
 
-    public function verify($token){
+    public function verify($token)
+    {
         $user = User::query()->where('verification_token', $token)->firstOrFail();
         $user->verified = true;
         $user->verification_token = null;
@@ -85,8 +92,9 @@ class UserController extends ApiBaseController
         return $this->showMessage('User verification complete');
     }
 
-    public function resend(User $user){
-        if($user->isVerified()){
+    public function resend(User $user)
+    {
+        if ($user->isVerified()) {
             return $this->errorResponse('User already verified', Response::HTTP_CONFLICT);
         }
         Mail::to($user)->send(new UserVerification($user));

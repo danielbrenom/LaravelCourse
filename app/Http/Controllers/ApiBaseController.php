@@ -10,4 +10,6 @@ use Illuminate\Routing\Controller as BaseController;
 class ApiBaseController extends BaseController
 {
     use ApiResponser, ValidatesRequests;
+
+    public function __construct(){ }
 }

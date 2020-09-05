@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Signature;
 use App\Http\Middleware\Throttle;
+use App\Http\Middleware\TransformInput;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'throttle' => Throttle::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'signature' => Signature::class,
+        'transform.input' => TransformInput::class,
     ];
 }

@@ -7,6 +7,8 @@ namespace Modules\Seller\Http\Controllers;
 use App\Domain\Models\Tables\Product;
 use App\Domain\Models\Tables\Seller;
 use App\Http\Controllers\ApiBaseController;
+use App\Transformers\ProductTransformer;
+use App\Transformers\UserTransformer;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +19,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("transform.input:" . ProductTransformer::class)->only(['store', 'update']);
+    }
+
     public function index(Seller $seller): JsonResponse
     {
         return $this->showAll($seller->products);

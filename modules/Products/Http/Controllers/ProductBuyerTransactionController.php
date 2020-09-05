@@ -7,12 +7,18 @@ use App\Domain\Models\Tables\Buyer;
 use App\Domain\Models\Tables\Product;
 use App\Domain\Models\Tables\Transaction;
 use App\Http\Controllers\ApiBaseController;
+use App\Transformers\TransactionTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ProductBuyerTransactionController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("transform.input:" . TransactionTransformer::class)->only(['store']);
+    }
     public function store(Product $product, Buyer $buyer, Request $request){
         $rules = [
             'quantity' => 'required|integer|min:1'
