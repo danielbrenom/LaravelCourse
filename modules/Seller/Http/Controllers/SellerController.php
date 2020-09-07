@@ -8,6 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 class SellerController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("scope:read-general")->only(['show']);
+    }
 
     public function index(): JsonResponse
     {

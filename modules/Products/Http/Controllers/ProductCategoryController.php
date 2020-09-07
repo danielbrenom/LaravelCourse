@@ -12,6 +12,13 @@ use Illuminate\Http\Response;
 
 class ProductCategoryController extends ApiBaseController
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+        $this->middleware('auth:api')->except(['index']);
+        $this->middleware("scope:manage-product")->except(['index']);
+    }
+
     public function index(Product $product){
         return $this->showAll($product->categories);
     }

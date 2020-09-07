@@ -8,6 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 class BuyerController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("scope:read-general")->only(['index']);
+    }
     public function index(): JsonResponse
     {
         $buyers = Buyer::has('transactions')->get();

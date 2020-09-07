@@ -23,6 +23,8 @@ class SellerProductController extends ApiBaseController
     {
         parent::__construct();
         $this->middleware("transform.input:" . ProductTransformer::class)->only(['store', 'update']);
+        $this->middleware("scope:manage-product");
+        $this->middleware("scope:read-general")->only(['index']);
     }
 
     public function index(Seller $seller): JsonResponse

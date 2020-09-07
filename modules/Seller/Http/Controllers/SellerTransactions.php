@@ -9,6 +9,11 @@ use App\Http\Controllers\ApiBaseController;
 
 class SellerTransactions extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("scope:read-general")->only(['index']);
+    }
     public function index(Seller $seller)
     {
         $transactions = $seller->products()

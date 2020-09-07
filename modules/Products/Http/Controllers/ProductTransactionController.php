@@ -9,6 +9,11 @@ use App\Http\Controllers\ApiBaseController;
 
 class ProductTransactionController extends ApiBaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware("scope:read-general")->only(['index']);
+    }
     public function index(Product $product)
     {
         return $this->showAll($product->transactions);

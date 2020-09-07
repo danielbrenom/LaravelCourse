@@ -21,7 +21,6 @@ services:
       - MYSQL_DATABASE=laravel-course
       - MYSQL_USER=laravel-course
       - MYSQL_PASSWORD=laravel-course
-
   app:
     image: ambientum/php:7.2-nginx
     container_name: laravel-course-app
@@ -35,3 +34,4 @@ services:
       - "80:8080"
     links:
       - mysql
+
