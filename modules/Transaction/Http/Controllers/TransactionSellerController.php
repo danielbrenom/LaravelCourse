@@ -12,6 +12,7 @@ class TransactionSellerController extends ApiBaseController
     {
         parent::__construct();
         $this->middleware("scope:read-general")->only(['index']);
+        $this->middleware('can:view,transaction')->only('index');
     }
     public function index(Transaction $transaction){
         return $this->showOne($transaction->products->seller);

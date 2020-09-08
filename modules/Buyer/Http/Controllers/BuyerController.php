@@ -12,9 +12,11 @@ class BuyerController extends ApiBaseController
     {
         parent::__construct();
         $this->middleware("scope:read-general")->only(['index']);
+        $this->middleware("can:view,buyer")->only(['show']);
     }
     public function index(): JsonResponse
     {
+        $this->allowAdminAction();
         $buyers = Buyer::has('transactions')->get();
         return $this->showAll($buyers);
     }

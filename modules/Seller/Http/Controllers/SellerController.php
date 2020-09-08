@@ -12,10 +12,12 @@ class SellerController extends ApiBaseController
     {
         parent::__construct();
         $this->middleware("scope:read-general")->only(['show']);
+        $this->middleware('can:view,seller')->only('show');
     }
 
     public function index(): JsonResponse
     {
+        $this->allowAdminAction();
         $seller = Seller::has('products')->get();
         return $this->showAll($seller);
     }

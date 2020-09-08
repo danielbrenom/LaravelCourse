@@ -12,10 +12,10 @@ class ProductBuyerController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware("scope:read-general")->only(['index']);
     }
     public function index(Product $product)
     {
+        $this->allowAdminAction();
         $buyers = $product->transactions()
             ->with('buyer')
             ->get()

@@ -20,10 +20,14 @@ class UserController extends ApiBaseController
         $this->middleware('auth:api')->except(['store', 'resend', 'verify']);
         $this->middleware("transform.input:" . UserTransformer::class)->only(['store', 'update']);
         $this->middleware("scope:manage-account")->only(['show', 'update']);
+        $this->middleware('can:view,user')->only('show');
+        $this->middleware('can:update,user')->only('update');
+        $this->middleware('can:delete,user')->only('destroy');
     }
 
     public function index(): JsonResponse
     {
+        $this->allowAdminAction();
         $user = User::all();
         return $this->showAll($user);
     }
@@ -69,6 +73,7 @@ class UserController extends ApiBaseController
             $user->verification_token = User::generateVerificationToken();
         }
         if ($request->has('admin') && !$user->isVerified()) {
+            $this->allowAdminAction();
             return $this->errorResponse(trans('user::messages.only_verified'), Response::HTTP_CONFLICT);
         }
         $user->fill($data);

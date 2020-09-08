@@ -19,6 +19,7 @@ class ProductBuyerTransactionController extends ApiBaseController
         parent::__construct();
         $this->middleware("transform.input:" . TransactionTransformer::class)->only(['store']);
         $this->middleware("scope:purchase-product")->only(['store']);
+        $this->middleware("can:purchase,buyer")->only(['store']);
     }
     public function store(Product $product, Buyer $buyer, Request $request){
         $rules = [

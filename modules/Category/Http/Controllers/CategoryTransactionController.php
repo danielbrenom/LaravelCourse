@@ -11,10 +11,10 @@ class CategoryTransactionController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware("scope:read-general")->only(['index']);
     }
     public function index(Category $category)
     {
+        $this->allowAdminAction();
         $transactions = $category->products()
             ->whereHas('transactions')
             ->with('transactions')

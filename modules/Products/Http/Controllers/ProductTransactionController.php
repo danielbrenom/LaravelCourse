@@ -16,6 +16,7 @@ class ProductTransactionController extends ApiBaseController
     }
     public function index(Product $product)
     {
+        $this->allowAdminAction();
         return $this->showAll($product->transactions);
     }
 }
